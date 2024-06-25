@@ -1,12 +1,12 @@
 ---
-title: "Advancing public health and data science using INLA - Day 4"
+title: "Flexible (Non-stationary) Besag model"
 author: "Janet van Niekerk (janet.vanNiekerk@kaust.edu.sa)"
 output: html_document
-date: "May 2024"
+date: "June 2024"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = "/Users/vanniej/Documents/GitHub/INLA-CDC_2023")
+knitr::opts_knit$set(root.dir = "/Users/vanniej/Documents/GitHub/SYMSTAT2024_Workshop2")
 
 library("INLA")
 library("DiagrammeR")
