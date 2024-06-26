@@ -107,8 +107,8 @@ pred <- predict(
     fit, 
     grid, 
     ~ data.frame(
-    lambda = exp(Intercept + spatial),
-    loglambda = Intercept + spatial
+    lambda = exp(spatial),
+    loglambda = spatial
     )
 )
 
@@ -119,111 +119,12 @@ ggplot() + theme_minimal() +
     geom_sf(data = pred$loglambda,            
             aes(color = mean)) +
     scale_color_distiller(
-        palette = 'RdBu'
-    ) 
-
-+
-    geom_sf(data = bkt)
-
-## some interpretation 
-
-hist(pred$lambda$mean)
-
-summary(pred$lambda$mean)
-
-nrow(burkitt) / st_area(bnd)
-
-exp(-6.61)
-
-## extra
-
-## Explore \lambda() 
-
-## setup integration points
-ipts <- fm_int(
-    domain = mesh,
-    samplers = bnd)
-
-str(ipts)
-
-ggplot(ipts) +
-    theme_minimal() +
-    geom_sf(data=bnd, fill = gray(0.9)) + 
-    geom_sf(aes(color = weight)) 
-
-## as sf
-ipts.sf <- st_sf(
-    data.frame(
-        st_drop_geometry(ipts), 
-        geometry = st_geometry(ipts)
-    )
-)
-
-str(ipts.sf)
-
-## Lambda samples
-iLambda <- predict(
-  fit,
-  ipts.sf,
-  ~ weight * exp(spatial + Intercept)
-)
-
-str(iLambda)
-
-c(sum(iLambda$mean),
-  sum(iLambda$q0.025),
-  sum(iLambda$q0.975))
-
-### setup sub-areas
-st_bbox(bnd)
-bb
-apply(bb, 1, diff)
-
-hx <- 46
-
-subAreas.grid <- GridTopology(
-    bb[, 1] + hx/2,
-    cellsize = c(hx, hx),
-    cells.dim = c(2, 4)
-)
-subAreas.grid
-
-Gridb <- SpatialGrid(subAreas.grid)
-
-plot(Gridb)
-points(st_coordinates(st_geometry(ipts)), pch = 4, cex = 0.5)
-
-gridSP <- as.SpatialPolygons.GridTopology(subAreas.grid)
-ipts.b <- fm_int(
-    domain = mesh,
-    samplers = gridSP
-)
-
-str(ipts.b)
-table(ipts.b$.block)
-
-plot(ipts.b, col = ipts.b$.block)
-
-## Lambda samples with the new setup
-bLambda <- predict(
-  fit,
-  ipts.b,
-  ~ weight * exp(spatial + Intercept)
-)
-
-str(bLambda)
-
-tapply(bLambda$mean, bLambda$.block, sum)
-tapply(bLambda$q0.025, bLambda$.block, sum)
-tapply(bLambda$q0.975, bLambda$.block, sum)
-
-obs.counts <- st_within(
-    bkt,
-    st_as_sf(gridSP)
-)
-
-table(unlist(obs.counts))
-tapply(bLambda$mean, bLambda$.block, sum)
+        palette = "Spectral"
+    ) +
+    geom_sf(data = bkt, cex = 0.1) +
+  theme(legend.title = element_blank(),
+        legend.key.height = unit(1, "null")) +
+  guides(colour = guide_colourbar(position = "right"))
 
 ## see a complete example at
 ## https://inlabru-org.github.io/inlabru/articles/2d_lgcp.html

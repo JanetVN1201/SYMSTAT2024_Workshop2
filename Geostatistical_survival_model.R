@@ -1,10 +1,34 @@
+library("INLA")
+library("DiagrammeR")
+library("car")
+library("ggpubr")
+library("spdep")
+library("RColorBrewer")
+library("spatstat")
+library("sp")
+library("latticeExtra")
+library("gridExtra")
+library("gstat")
+library("raster")
+library("ggplot2")
+library("ggfortify")
+library("survival")
+library("joineR")
+library("BayesSurvival")
+library("icenReg")
+library("nloptr")
+library("faraway")
+library("lme4")
+library("boot")
+library("rnaturalearth")
+library("leaflet")
+library("viridis")
+library("ggthemes")
 library(sf)
 library(survival)
 library(fmesher)
-library(INLA)
-library(ggplot2)
-library(gridExtra)
 library(metR)
+par(mar = c(0,0,0,0))
 
 ## log(\lambda_i) = \eta_i
 ##  \eta_i : linear predictor for observation i
@@ -219,13 +243,12 @@ gg.sd <- gg0 +
   guides(colour = guide_colourbar(position = "bottom"))
 
 gg.sd
-## visualize the spatial effect
+## visualize the spatial effect and uncertainty
 grid.arrange(
     gg.m,
     gg.sd,
     nrow = 1
 )
-
 
    
 ##We can also do a Cox model (or various others including cure models)
